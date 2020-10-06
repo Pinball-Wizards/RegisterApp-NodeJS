@@ -4,10 +4,10 @@
 	<title>Register - Sign In</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
 
-	<link rel="stylesheet" type="text/css" href="/styles/master.css">
+	<link rel="stylesheet" type="text/css" href="../public/styles/master.css">
 
-	<script type="text/javascript" src="/scripts/master.js" defer></script>
-	<script type="text/javascript" src="/scripts/signIn.js" defer></script>
+	<script type="text/javascript" src="../public/scripts/master.js" defer></script>
+	<script type="text/javascript" src="../public/scripts/signIn.js" defer></script>
 </head>
 
 <body>
@@ -24,6 +24,7 @@
 				<% } %>
 			</h4>
 		</div>
+		<p id="errorTest" style="color:red"></p>
 
 		<form action="/" method="POST" onsubmit="return validateForm();" class="inputContent">
 			Employee ID: <input type="number" id="employeeID" name="employeeID" placeholder="Employee ID"></input> </br>

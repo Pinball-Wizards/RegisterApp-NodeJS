@@ -3,6 +3,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function validateForm() {
-	// TODO: Validate the user input
-	return true;
+	var employeeID = document.getElementById("employeeID").value;
+	var password = document.getElementById("password").value;
+	if(employeeID != '' && Number.isInteger(employeeID) && password != ''){
+		return true;
+	} else {
+		document.getElementById("errorTest").innerHTML = "* Error in input entries."
+	}
+	// return true;
 }
