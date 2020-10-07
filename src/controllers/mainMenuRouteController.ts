@@ -13,13 +13,24 @@ export const start = async (req: Request, res: Response): Promise<void> => {
 	return ValidateActiveUser.execute((<Express.Session>req.session).id)
 		.then((activeUserCommandResponse: CommandResponse<ActiveUser>): void => {
 			// TODO: Examine the ActiveUser classification if you want this information
-			// If there is an active user for the current session then:
-			//		should add any error messages received in the query string paramters to the view
-			//		should serve up the Main Menu view/document
+			if(activeUserCommandResponse.status != 404){
+				return res.render(
+					ViewNameLookup.MainMenu,
+					<PageResponse>{
+						errorMessage: activeUserCommandResponse.message
+					});
+			} else if(activeUserCommandResponse.status == 404){
+				// return res.render(
+				// 	ViewNameLookup.SignIn, 
+				// 	<MainMenuPageResponse>{
+				// 		errorMessage: activeUserCommandResponse.message
+				// 	}); // still need to check if any of this actually works...
+				return res.redirect(
+					activeUserCommandResponse.status,
+					ViewNameLookup.SignIn
+				);
+			}
 
-			// Else 
-			//		should immediately redirect to the Sign In view/document with an appropriate error message
-			
 			const isElevatedUser: boolean = true;
 
 			// This recommends to Firefox that it refresh the page every time

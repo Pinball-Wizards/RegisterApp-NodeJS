@@ -8,7 +8,15 @@ function validateForm() {
 	if(employeeID != '' && Number.isInteger(employeeID) && password != ''){
 		return true;
 	} else {
-		document.getElementById("errorTest").innerHTML = "* Error in input entries."
+		if(employeeID == ''){
+			document.getElementById("errorTest").innerHTML = "* Employee ID field empty.";
+		}
+		if(password == ''){
+			document.getElementById("errorTest").innerHTML = "* Password field empty.";
+		}
+		if(!Number.isInteger(employeeID)){
+			document.getElementById("errorTest").innerHTML = "* Employee ID entry not a number.";
+		}
+		return false;
 	}
-	// return true;
 }
