@@ -31,6 +31,7 @@ const validateSaveRequest = (
 
 export const execute = async (
 	saveEmployeeRequest: EmployeeSaveRequest,
+	isInitialEmployee?: boolean
 ): Promise<CommandResponse<Employee>> => {
 
 	const validationResponse: CommandResponse<Employee> =
@@ -45,9 +46,9 @@ export const execute = async (
 		lastName: saveEmployeeRequest.lastName,
 		password: Buffer.from(saveEmployeeRequest.password),
 		firstName: saveEmployeeRequest.firstName,
-		classification: (saveEmployeeRequest.isInitialEmployee
+		classification: (isInitialEmployee !== undefined && isInitialEmployee
 			? EmployeeClassification.GeneralManager
-			: saveEmployeeRequest),
+			: saveEmployeeRequest.classification),
 	};
 
 	let createTransaction: Sequelize.Transaction;
