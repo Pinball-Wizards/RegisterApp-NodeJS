@@ -2,7 +2,7 @@ import express from "express";
 import { RouteLookup } from "../controllers/lookups/routingLookup";
 import * as EmployeeDetailRouteController from "../controllers/employeeDetailRouteController";
 
-function productDetailRoutes(server: express.Express) {
+function employeeDetailRoutes(server: express.Express) {
 	server.get(
 		RouteLookup.EmployeeDetail,
 		EmployeeDetailRouteController.start);
@@ -20,4 +20,4 @@ function productDetailRoutes(server: express.Express) {
 		EmployeeDetailRouteController.updateEmployee);
 }
 
-module.exports.routes = productDetailRoutes;
+module.exports.routes = employeeDetailRoutes;

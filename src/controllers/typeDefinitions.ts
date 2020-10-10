@@ -60,6 +60,11 @@ export interface ProductDetailPageResponse extends PageResponse {
 	isElevatedUser: boolean;
 }
 
+export interface EmployeeDetailPageResponse extends PageResponse {
+	employee: Employee;
+	isElevatedUser: boolean;
+}
+
 export interface ProductListingPageResponse extends PageResponse {
 	products: Product[];
 	isElevatedUser: boolean;

@@ -49,6 +49,7 @@ export const execute = async (
 		classification: (isInitialEmployee !== undefined && isInitialEmployee
 			? EmployeeClassification.GeneralManager
 			: saveEmployeeRequest.classification),
+		active: true
 	};
 
 	let createTransaction: Sequelize.Transaction;

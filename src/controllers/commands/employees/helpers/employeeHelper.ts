@@ -9,7 +9,7 @@ export const hashString = (toHash: string): string => {
 };
 
 export const isElevatedUser = (employeeClassification: EmployeeClassification): boolean => {
-	return false; // TODO: Determine if an employee is an elevated user by their classification
+	return employeeClassification != EmployeeClassification.NotDefined && employeeClassification != EmployeeClassification.Cashier;
 };
 
 export const mapEmployeeData = (queriedEmployee: EmployeeModel): Employee => {
@@ -21,6 +21,6 @@ export const mapEmployeeData = (queriedEmployee: EmployeeModel): Employee => {
 		firstName: queriedEmployee.firstName,
 		managerId: queriedEmployee.managerId,
 		employeeId: queriedEmployee.employeeId,
-		classification: queriedEmployee.employeeId
+		classification: queriedEmployee.classification
 	};
 };
