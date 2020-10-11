@@ -1,24 +1,22 @@
-import Sequelize from "sequelize";
-import * as DatabaseConnection from "../models/databaseConnection";
-import { EmployeeFieldName, DatabaseTableName } from "../models/constants/databaseNames";
-import { Model, DataTypes, InitOptions, ModelAttributes, ModelAttributeColumnOptions } from "sequelize";
-import * as EmployeeModel from "../models/employeeModel";
 import * as ActiveUserRepository from "../models/activeUserModel";
-import { Express, Request, Response } from "express";
-import * as Helper from "../helpers/helper";
+import { ActiveUserModel } from "../models/activeUserModel";
 import { Resources, ResourceKey } from "../../../resourceLookup";
-import { CommandResponse, Employee, SignInRequest } from "../../typeDefinitions";
+import { CommandResponse, SignIn } from "../../typeDefinitions";
 
-export const execute = async (sessionKey: string): Promise<CommandResponse<ActiveUserRepository.ActiveUserModel> | void> => {
+export const execute = async (sessionKey: string): Promise<CommandResponse<SignIn>> => {
 	return ActiveUserRepository.queryBySessionKey(sessionKey)
-		.then((queriedActiveUser: (ActiveUserRepository.ActiveUserModel | null)): Promise<CommandResponse<ActiveUserRepository.ActiveUserModel> | void> => {
-			if (!queriedActiveUser) {
-				return Promise.reject(<CommandResponse<ActiveUserRepository.ActiveUserModel>>{
+		.then((queriedActiveUser: (ActiveUserModel | null)): Promise<void> => {
+			if (queriedActiveUser == null) {
+				return Promise.reject(<CommandResponse<ActiveUserModel>>{
 					status: 404,
-					message: Resources.getString(ResourceKey.USER_NOT_FOUND)
+					message: Resources.getString(ResourceKey.USER_SESSION_NOT_FOUND)
 				});
 			}
 
 			return queriedActiveUser.destroy();
+	}).then((): Promise<CommandResponse<SignIn>> => {
+		return Promise.resolve(<CommandResponse<SignIn>>{
+			status: 200,
+		});
 	});
 };

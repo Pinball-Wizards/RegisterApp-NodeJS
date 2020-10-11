@@ -5,6 +5,7 @@ import * as EmployeeQuery from "./commands/employees/employeeQuery";
 import * as EmployeeCreate from "./commands/employees/employeeCreateCommand";
 import * as EmployeeUpdate from "./commands/employees/employeeUpdateCommand";
 import * as EmployeeHelper from "./commands/employees/helpers/employeeHelper";
+import * as ActiveEmployeeExsists from "./commands/employees/activeEmployeeExistsQuery";
 import * as ValidateActiveUser from "./commands/activeUsers/validateActiveUserCommand";
 import { CommandResponse, Employee, EmployeeSaveRequest, ActiveUser, ApiResponse, EmployeeDetailPageResponse } from "./typeDefinitions";
 import { ViewNameLookup, ParameterLookup, RouteLookup, QueryParameterLookup } from "./lookups/routingLookup";
@@ -15,9 +16,23 @@ interface CanCreateEmployee {
 }
 
 const determineCanCreateEmployee = async (req: Request): Promise<CanCreateEmployee> => {
-	// TODO: Logic to determine if the user associated with the current session
-	//  is able to create an employee
-	return <CanCreateEmployee>{ employeeExists: false, isElevatedUser: false };
+
+	const functionResponse = <CanCreateEmployee>{ employeeExists: true, isElevatedUser: false };
+
+	ActiveEmployeeExsists.employeeExists()
+	.then((active: boolean): void => {
+		functionResponse.employeeExists = false;
+	}).catch((error: any): void => {
+
+	});
+
+	ValidateActiveUser.execute((<Express.Session>req.session).id)
+	.then((activeUserCommandResponse: CommandResponse<ActiveUser>): void => {
+		functionResponse.employeeExists = false;
+		functionResponse.isElevatedUser = EmployeeHelper.isElevatedUser((<ActiveUser>activeUserCommandResponse.data).classification);
+	});
+
+	return functionResponse;
 };
 
 export const start = async (req: Request, res: Response): Promise<void> => {
@@ -138,27 +153,9 @@ const saveEmployee = async (
 };
 
 export const updateEmployee = async (req: Request, res: Response): Promise<void> => {
-	ValidateActiveUser.execute((<Express.Session>req.session).id)
-		.then((activeUserCommandResponse: CommandResponse<ActiveUser>): Promise<void> => {
-			return saveEmployee(req, res, EmployeeUpdate.execute);
-		}).catch((error: any): void => {
-			res.redirect(
-				RouteLookup.SignIn
-				+ "/?" + QueryParameterLookup.ErrorCode
-				+ "=" + error.message
-			);
-		});
+	return saveEmployee(req, res, EmployeeUpdate.execute);
 };
 
 export const createEmployee = async (req: Request, res: Response): Promise<void> => {
-	ValidateActiveUser.execute((<Express.Session>req.session).id)
-		.then((activeUserCommandResponse: CommandResponse<ActiveUser>): Promise<void> => {
-			return saveEmployee(req, res, EmployeeCreate.execute);
-		}).catch((error: any): void => {
-			res.redirect(
-				RouteLookup.SignIn
-				+ "/?" + QueryParameterLookup.ErrorCode
-				+ "=" + error.message
-			);
-		});
+	return saveEmployee(req, res, EmployeeCreate.execute);
 };

@@ -43,6 +43,10 @@ export interface Employee {
 	classification: number;
 }
 
+export interface SignIn {
+	sessionKey: string;
+}
+
 export interface ActiveUser {
 	id: string;
 	name: string;
