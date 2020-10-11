@@ -7,6 +7,7 @@ import { ActiveUserModel } from "../models/activeUserModel";
 import * as Helper from "../helpers/helper";
 import { Resources, ResourceKey } from "../../../resourceLookup";
 import { CommandResponse, Employee, SignIn, SignInRequest } from "../../typeDefinitions";
+import * as bcrypt from "bcrypt";
 
 export const signInRequest = async (
 	session: Express.Session,
@@ -33,7 +34,7 @@ export const signInRequest = async (
 				message: Resources.getString(ResourceKey.EMPLOYEE_EMPLOYEE_ID_INVALID)
 			});
 		}
-		if (queriedEmployee.password != <unknown>signInReq.password) {
+		if ( bcrypt.compareSync(signInReq.password, queriedEmployee.password.toString())) {
 			return Promise.reject(<CommandResponse<SignIn>>{
 				status: 404,
 				message: Resources.getString(ResourceKey.EMPLOYEE_PASSWORD_INVALID)

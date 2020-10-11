@@ -1,5 +1,3 @@
-const { isVariableDeclarationList } = require("typescript");
-
 let hideEmployeeSavedAlertTimer = undefined;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -10,18 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
 // Save
 function saveActionClick(event) {
 	// TODO: Actually save the employee via an AJAX call
-	
-	const saveActionElement = event.target;
-	saveActionElement.disabled = true;
-
-	const employeeId = getEmployeeId();
-	const employeeIdIsDefined = ((employeeId != null) && (productId.trim() !== ""));
-	const saveActionUrl = ("/api/employeeDetail/" + (employeeIdIsDefined ? employeeId : ""));
-
-	const saveEmployeeRequest = {
-		id: employeeId,
-	};
-
 	if(document.getElementById('firstName').value == ""){
 		alert('Error: First name must be filled');
 		document.getElementById('firstName').focus();
@@ -45,6 +31,22 @@ function saveActionClick(event) {
 		return false;
 	}
 
+	const saveActionElement = event.target;
+	saveActionElement.disabled = true;
+
+	const employeeId = getEmployeeId();
+	const employeeIdIsDefined = ((employeeId != null) && (employeeId.trim() !== ""));
+	const saveActionUrl = ("/api/employeeDetail/" + (employeeIdIsDefined ? employeeId : ""));
+
+	const saveEmployeeRequest = {
+		id: employeeId,
+		firstName: getEmployeeFirstName(),
+		lastName: getEmployeeLastName(),
+		password: getEmployeePassword(),
+		classification: getEmployeeClassification(),
+		employeeId: getEmployeeEmployeeId(),
+	};
+
 	if(employeeIdIsDefined) {
 		ajaxPut(saveActionUrl, saveEmployeeRequest, (callbackResponse) => {
 			saveActionElement.disabled = false;
@@ -61,11 +63,12 @@ function saveActionClick(event) {
 				displayEmployeeSavedAlertModal();
 
 				if((callbackResponse.data != null)
-					&&(callbackResponse.data.product != null)
-					&&(callbackResponse.data.product.id.trim() !== "")){
+					&&(callbackResponse.data.employee != null)
+					&&(callbackResponse.data.employee.id.trim() !== "")){
 
-						document.getElementById("deleteActionContainer").classList.remove("hidden");
-						setProductId(callbackResponse.data.product.id.trim());
+						document.getElementById("employeeEmployeeId").classList.remove("hidden");
+						setEmployeeId(callbackResponse.data.employee.id.trim());
+						setEmployeeEmployeeId(callbackResponse.data.employee.employeeId.trim());
 				}
 			}
 		});
@@ -92,5 +95,65 @@ function hideEmployeeSavedAlertModal() {
 	}
 
 	getSavedAlertModalElement().style.display = "none";
+}
+
+function getEmployeeId() {
+	return getEmployeeIdElement().value;
+}
+
+function setEmployeeId(id) {
+	getEmployeeIdElement().value = id;
+}
+
+function getEmployeeIdElement() {
+	return document.getElementById("employeeId");
+}
+
+function getEmployeeFirstName() {
+	return getEmployeeFirstNameElement().value;
+}
+
+function getEmployeeFirstNameElement() {
+	return document.getElementById("firstName");
+}
+function getEmployeeLastName() {
+	return getEmployeeLastNameElement().value;
+}
+
+function getEmployeeLastNameElement() {
+	return document.getElementById("lastName");
+}
+function getEmployeePassword() {
+	return getEmployeePasswordElement().value;
+}
+
+function getEmployeePasswordElement() {
+	return document.getElementById("password");
+}
+function getEmployeeEmployeeId() {
+	return getEmployeeEmployeeIdElement().value;
+}
+
+function setEmployeeEmployeeId(id) {
+	getEmployeeEmployeeIdElement().value = id;
+}
+
+function getEmployeeEmployeeIdElement() {
+	return document.getElementById("employeeEmployeeId");
+}
+
+function getEmployeeManager() {
+	return getEmployeeManagerElement().value;
+}
+
+function getEmployeeManagerElement() {
+	return document.getElementById("managerId");
+}
+function getEmployeeClassification() {
+	return getEmployeeClassificationElement().value;
+}
+
+function getEmployeeClassificationElement() {
+	return document.getElementById("employeeType");
 }
 // End save

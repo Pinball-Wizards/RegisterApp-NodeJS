@@ -74,22 +74,26 @@
 							<input class="update" id="confirmPassword" type="text">
 						</td>
 					</tr>
-
-					<label for="employeeType">Employee type:</label>
-					<select name="employeeType" id="employeeType">
-						<option value="101">Cashier</option>
-						<option value="501">Shift Manager</option>
-						<option value="701">General Manager</option>
-					</select>
-
-					<button type="button">Save</button>
-
+					<tr>
+						<td class="label">Employee type:</td>
+						<td>
+							<select class="update" name="employeeType" id="employeeType">
+								<option value="101">Cashier</option>
+								<option value="501">Shift Manager</option>
+								<option value="701">General Manager</option>
+							</select>
+						</td>
+					</tr>
+					<label class="label" for="employeeType"></label>
 				</tbody>
 			</table>
 		</div>
 
-		<!-- TODO: An action element to initiate a save -->
-		<button id="saveButton" type="button" class="action">Save</button>
+		<div>
+			<!-- TODO: An action element to initiate a save -->
+			<button id="saveButton" type="button" class="action">Save</button>
+		</div>
+		
 
 		
 
