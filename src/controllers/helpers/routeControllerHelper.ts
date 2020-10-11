@@ -15,7 +15,7 @@ export interface ApiErrorHints {
 }
 
 export const invalidSessionRedirectUrl: string = (RouteLookup.SignIn
-	+ "/?" + QueryParameterLookup.ErrorCode
+	+ "?" + QueryParameterLookup.ErrorCode
 	+ "=" + ResourceKey.USER_SESSION_NOT_ACTIVE);
 
 export const buildNoPermissionsRedirectUrl = (
