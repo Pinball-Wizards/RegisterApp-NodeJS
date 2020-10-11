@@ -25,7 +25,26 @@
 			</h4>
 		</div>
 
-		<!-- TODO: Add the various action button elements -->
+		<div>
+			<br />
+			<button id="startTranzxButton" type="button" class="action">
+				Start Transaction</button>
+			<br />
+			<button id="viewProductsButton" type="button" class="action">
+				View Products</button>
+			<br />
+			<div id="restrictedContainer" <% if (!locals.isElevatedUser) { %>class="hidden"<% } %>>
+				<button id="createEmployButton" type="button" class="action">
+					Create Employee</button>
+				<br />
+				<button id="salesReportButton" type="button" class="action">
+					Sales Report</button>
+				<br />
+				<button id="cashierReportButton" type="button" class="action">
+					Cashier Report</button>
+				<br />
+			</div>
+		</div>
 	</div>
 
 	<div class="hidden">
