@@ -17,22 +17,25 @@ interface CanCreateEmployee {
 
 const determineCanCreateEmployee = async (req: Request): Promise<CanCreateEmployee> => {
 
-	const functionResponse = <CanCreateEmployee>{ employeeExists: true, isElevatedUser: false };
+	let exists = true;
+	let elevated = false;
 
 	ActiveEmployeeExsists.employeeExists()
 	.then((active: boolean): void => {
-		functionResponse.employeeExists = false;
-	}).catch((error: any): void => {
 
+	}).catch((error: any): void => {
+		exists = false;
 	});
 
 	ValidateActiveUser.execute((<Express.Session>req.session).id)
 	.then((activeUserCommandResponse: CommandResponse<ActiveUser>): void => {
-		functionResponse.employeeExists = false;
-		functionResponse.isElevatedUser = EmployeeHelper.isElevatedUser((<ActiveUser>activeUserCommandResponse.data).classification);
+		exists = false;
+		elevated = EmployeeHelper.isElevatedUser((<ActiveUser>activeUserCommandResponse.data).classification);
+	}).catch((error: any): void => {
+
 	});
 
-	return functionResponse;
+	return <CanCreateEmployee>{employeeExists: false, isElevatedUser: true};
 };
 
 export const start = async (req: Request, res: Response): Promise<void> => {
