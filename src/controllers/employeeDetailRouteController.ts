@@ -9,6 +9,7 @@ import * as ActiveEmployeeExsists from "./commands/employees/activeEmployeeExist
 import * as ValidateActiveUser from "./commands/activeUsers/validateActiveUserCommand";
 import { CommandResponse, Employee, EmployeeSaveRequest, ActiveUser, ApiResponse, EmployeeDetailPageResponse } from "./typeDefinitions";
 import { ViewNameLookup, ParameterLookup, RouteLookup, QueryParameterLookup } from "./lookups/routingLookup";
+import { EmployeeModel } from "./commands/models/employeeModel";
 
 interface CanCreateEmployee {
 	employeeExists: boolean;
@@ -16,26 +17,15 @@ interface CanCreateEmployee {
 }
 
 const determineCanCreateEmployee = async (req: Request): Promise<CanCreateEmployee> => {
-
-	let exists = true;
-	let elevated = false;
-
-	ActiveEmployeeExsists.employeeExists()
-	.then((active: boolean): void => {
-
-	}).catch((error: any): void => {
-		exists = false;
-	});
-
-	ValidateActiveUser.execute((<Express.Session>req.session).id)
-	.then((activeUserCommandResponse: CommandResponse<ActiveUser>): void => {
-		exists = false;
-		elevated = EmployeeHelper.isElevatedUser((<ActiveUser>activeUserCommandResponse.data).classification);
-	}).catch((error: any): void => {
-
-	});
-
-	return <CanCreateEmployee>{employeeExists: false, isElevatedUser: true};
+	return ActiveEmployeeExsists.employeeExists()
+		.then((active: boolean): Promise<CommandResponse<ActiveUser>> => {
+			return ValidateActiveUser.execute((<Express.Session>req.session).id);
+		}).then((activeUserCommandResponse: CommandResponse<ActiveUser>): Promise<CanCreateEmployee> => {
+			const check = EmployeeHelper.isElevatedUser((<ActiveUser>activeUserCommandResponse.data).classification);
+			return Promise.resolve(<CanCreateEmployee>{ employeeExists: true, isElevatedUser: check });
+		}).catch((error: any): Promise<CanCreateEmployee> => {
+			return Promise.resolve(<CanCreateEmployee>{ employeeExists: false, isElevatedUser: true });
+		});
 };
 
 export const start = async (req: Request, res: Response): Promise<void> => {

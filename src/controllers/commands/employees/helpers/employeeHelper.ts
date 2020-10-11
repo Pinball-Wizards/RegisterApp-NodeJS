@@ -9,7 +9,7 @@ export const hashString = (toHash: string): string => {
 };
 
 export const isElevatedUser = (employeeClassification: EmployeeClassification): boolean => {
-	return employeeClassification != EmployeeClassification.NotDefined && employeeClassification != EmployeeClassification.Cashier;
+	return (employeeClassification != EmployeeClassification.NotDefined && employeeClassification != EmployeeClassification.Cashier);
 };
 
 export const mapEmployeeData = (queriedEmployee: EmployeeModel): Employee => {

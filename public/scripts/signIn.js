@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function validateForm() {
 
-	var employeeID = document.getElementById("employeeID").value;
+	var employeeID = document.getElementById("employeeId").value;
 	var password = document.getElementById("password").value;
 
 	if ((employeeID == null) || (employeeID.trim() === "")) {

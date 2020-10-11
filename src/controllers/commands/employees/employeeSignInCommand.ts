@@ -14,16 +14,16 @@ export const signInRequest = async (
 	signInReq: SignInRequest
 ): Promise<CommandResponse<SignIn>> => {
 	if (Helper.isBlankString(signInReq.password)) {
-		return <CommandResponse<SignIn>>{
+		return Promise.reject(<CommandResponse<SignIn>>{
 			status: 422,
 			message: Resources.getString(ResourceKey.EMPLOYEE_PASSWORD_INVALID)
-		};
+		});
 	}
-	if (!(/^\d+$/.test(signInReq.employeeId)) || Helper.isBlankString(signInReq.employeeId)) {
-		return <CommandResponse<SignIn>>{
+	if (Helper.isBlankString(signInReq.employeeId) || Number(signInReq) == NaN) {
+		return Promise.reject(<CommandResponse<SignIn>>{
 			status: 422,
 			message: Resources.getString(ResourceKey.EMPLOYEE_EMPLOYEE_ID_INVALID)
-		};
+		});
 	}
 
 	return EmployeeRepository.queryByEmployeeId(Number(signInReq.employeeId))
@@ -34,7 +34,7 @@ export const signInRequest = async (
 				message: Resources.getString(ResourceKey.EMPLOYEE_EMPLOYEE_ID_INVALID)
 			});
 		}
-		if ( bcrypt.compareSync(signInReq.password, queriedEmployee.password.toString())) {
+		if ( !bcrypt.compareSync(signInReq.password, queriedEmployee.password.toString())) {
 			return Promise.reject(<CommandResponse<SignIn>>{
 				status: 404,
 				message: Resources.getString(ResourceKey.EMPLOYEE_PASSWORD_INVALID)
@@ -48,14 +48,15 @@ export const signInRequest = async (
 			signInTransaction = createdTransaction;
 
 			return ActiveUserRepository.queryByEmployeeId(
-				signInReq.employeeId,
+				queriedEmployee.id,
 				signInTransaction);
 		}).then((queriedActiveEmployee: ActiveUserModel | null): Promise<ActiveUserModel> => { // Promise
 			if (queriedActiveEmployee == null) {
 				return ActiveUserModel.create(
 				<Object>{
-					sessionKey: session.key,
-					employeeId: signInReq.employeeId,
+					sessionKey: session.id,
+					employeeId: queriedEmployee.id,
+					name: queriedEmployee.firstName + " " + queriedEmployee.lastName,
 					classification: queriedEmployee.classification
 				},
 				<Sequelize.InstanceUpdateOptions>{
@@ -65,7 +66,7 @@ export const signInRequest = async (
 
 			return (queriedActiveEmployee.update(
 				<Object>{
-					sessionKey: session.key
+					sessionKey: session.id
 				},
 				<Sequelize.InstanceUpdateOptions>{
 					transaction: signInTransaction

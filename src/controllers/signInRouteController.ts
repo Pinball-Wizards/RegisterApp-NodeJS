@@ -22,11 +22,13 @@ export const signIn = async (req: Request, res: Response, error: any
 	//  to sign in the user
 	EmployeeSignInCommand.signInRequest((<Express.Session>req.session), req.body)
 	.then((activeUser: CommandResponse<SignIn>): Promise<void> => {
-		return Promise.resolve(res.redirect(ViewNameLookup.MainMenu));
+		return Promise.resolve(res.redirect(RouteLookup.MainMenu));
 	}).catch((error: any): void => {
 		return res.render(
 			ViewNameLookup.SignIn,
-			<String>error.message
+			<Object>{
+				errorMessage: error.message
+			}
 		);
 	});
 };
