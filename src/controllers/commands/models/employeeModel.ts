@@ -14,6 +14,7 @@ export class EmployeeModel extends Model {
 
 	public readonly id!: string;
 	public readonly createdOn!: Date;
+	static queryActiveExists: EmployeeModel | PromiseLike<EmployeeModel | null> | null;
 }
 
 EmployeeModel.init(
