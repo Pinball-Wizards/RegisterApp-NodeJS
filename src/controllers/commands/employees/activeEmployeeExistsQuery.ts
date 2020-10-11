@@ -1,9 +1,11 @@
-import Sequelize from "sequelize";
-import { DatabaseConnection } from "./databaseConnection";
-import { EmployeeFieldName, DatabaseTableName } from "./constants/databaseNames";
-import { Model, DataTypes, InitOptions, ModelAttributes, ModelAttributeColumnOptions } from "sequelize";
-import EmployeeModel from "./models/employeeModel";
+import { DatabaseConnection } from "../models/databaseConnection";
+import { EmployeeFieldName, DatabaseTableName } from "../models/constants/databaseNames";
+import * as EmployeeRepository from "../models/employeeModel";
 
-export const employeeExists = async (): => {
-	return EmployeeModel.queryActiveExists();
+export const employeeExists = async (): Promise<boolean> => {
+	if(EmployeeRepository.queryActiveExists != null) {
+		return true;
+	} else {
+		return false;
+	}
 };
