@@ -27,11 +27,25 @@
 		<p id="errorTest" style="color:red"></p>
 
 		<form action="/" method="POST" onsubmit="return validateForm();" class="inputContent">
-			Employee ID: <input type="number" id="employeeID" name="employeeID" placeholder="Employee ID"></input> </br>
-			Password: <input type="password" id="password" name="password" placeholder="Password"></input> </br>
-
-			<input type="submit" value="Sign In"> </br>
-
+			<div style="display: inline-block;">
+				<table>
+					<tbody>
+						<tr>
+							<td class="label">Employee ID: </td>
+							<td>
+								<input type="text" id="employeeID" name="employeeID" class="update"><br><br>
+							</td>
+						</tr>
+						<tr>
+							<td class="label">Password: </td>
+							<td>
+								<input type="password" id="password" name="password" class="update"><br><br>
+							   </td>
+						</tr>
+					</tbody>
+				</table>
+				<input type="submit" value="Sign In" class="submit">
+			</div>
 		</form>
 	</div>
 		

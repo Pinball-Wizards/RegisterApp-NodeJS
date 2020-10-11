@@ -13,6 +13,24 @@ export const start = async (req: Request, res: Response): Promise<void> => {
 	return ValidateActiveUser.execute((<Express.Session>req.session).id)
 		.then((activeUserCommandResponse: CommandResponse<ActiveUser>): void => {
 			// TODO: Examine the ActiveUser classification if you want this information
+			if(activeUserCommandResponse.status != 404){
+				return res.render(
+					ViewNameLookup.MainMenu,
+					<PageResponse>{
+						errorMessage: activeUserCommandResponse.message
+					});
+			} else if(activeUserCommandResponse.status == 404){
+				// return res.render(
+				// 	ViewNameLookup.SignIn, 
+				// 	<MainMenuPageResponse>{
+				// 		errorMessage: activeUserCommandResponse.message
+				// 	}); // still need to check if any of this actually works...
+				return res.redirect(
+					activeUserCommandResponse.status,
+					ViewNameLookup.SignIn
+				);
+			}
+
 			const isElevatedUser: boolean = true;
 
 			// This recommends to Firefox that it refresh the page every time
