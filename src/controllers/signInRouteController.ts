@@ -1,25 +1,17 @@
 import { Request, Response } from "express";
 import * as ActiveEmployeeExistsQuery from "./commands/employees/activeEmployeeExistsQuery";
-import { Resources } from "../resourceLookup";
-import * as Helper from "./helpers/routeControllerHelper";
 import { ViewNameLookup, ParameterLookup, RouteLookup } from "./lookups/routingLookup";
 import { PageResponse, CommandResponse, ApiResponse, ActiveUser, MainMenuPageResponse } from "./typeDefinitions";
-import * as ActiveUserModel from "./commands/models/activeUserModel";
-import * as EmployeeModel from "./commands/models/employeeModel";
-import * as DatabaseConnection from "./commands/models/databaseConnection";
 import * as EmployeeSignInCommand from "./commands/employees/employeeSignInCommand";
 import * as ClearActiveUser from "./commands/activeUsers/clearActiveUserCommand";
-import { error } from "console";
 
 export const start = async (req: Request, res: Response): Promise<void> => {
-	if(ActiveEmployeeExistsQuery.employeeExists()){
-		res.render(
-			ViewNameLookup.SignIn
-		);
-	} else {
-		res.redirect(ViewNameLookup.MainMenu);
-		//SHOULD REDIRECT TO EMPLOYEE DETAIL VIEW BUT DONT HAVE YET
-	}
+	return ActiveEmployeeExistsQuery.employeeExists()
+	.then ((exisits: boolean): Promise<void> => {
+		return Promise.resolve(res.render(ViewNameLookup.SignIn));
+	}).catch((error: any): void => {
+		res.redirect(ViewNameLookup.EmployeeDetail);
+	});
 };
 
 export const signIn = async (req: Request, res: Response, error: any
@@ -29,9 +21,9 @@ export const signIn = async (req: Request, res: Response, error: any
 	//  to sign in the user
 	EmployeeSignInCommand.signInRequest((<Express.Session>req.session), req.body);
 	let errorMessage: (string) = "";
-	if(error.status == 404) {
+	if (error.status == 404) {
 		errorMessage = error.message;
-		
+
 		res.render(
 			ViewNameLookup.SignIn,
 			<String>errorMessage

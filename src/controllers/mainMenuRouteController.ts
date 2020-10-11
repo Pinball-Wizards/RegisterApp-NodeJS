@@ -13,15 +13,15 @@ export const start = async (req: Request, res: Response): Promise<void> => {
 	return ValidateActiveUser.execute((<Express.Session>req.session).id)
 		.then((activeUserCommandResponse: CommandResponse<ActiveUser>): void => {
 			// TODO: Examine the ActiveUser classification if you want this information
-			if(activeUserCommandResponse.status != 404){
+			if (activeUserCommandResponse.status != 404) {
 				return res.render(
 					ViewNameLookup.MainMenu,
 					<PageResponse>{
 						errorMessage: activeUserCommandResponse.message
 					});
-			} else if(activeUserCommandResponse.status == 404){
+			} else if (activeUserCommandResponse.status == 404) {
 				// return res.render(
-				// 	ViewNameLookup.SignIn, 
+				// 	ViewNameLookup.SignIn,
 				// 	<MainMenuPageResponse>{
 				// 		errorMessage: activeUserCommandResponse.message
 				// 	}); // still need to check if any of this actually works...
@@ -43,7 +43,7 @@ export const start = async (req: Request, res: Response): Promise<void> => {
 				ViewNameLookup.MainMenu,
 				<MainMenuPageResponse>{
 					isElevatedUser: isElevatedUser,
-					errorMessage: Resources.getString(req.query[QueryParameterLookup.ErrorCode])
+					errorMessage: Resources.getString(req.query[QueryParameterLookup.ErrorCode]?.toString())
 				});
 		}).catch((error: any): void => {
 			if (!Helper.processStartError(error, res)) {
