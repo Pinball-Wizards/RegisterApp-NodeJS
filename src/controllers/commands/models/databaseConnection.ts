@@ -8,6 +8,9 @@ export const DatabaseConnection: Sequelize.Sequelize =
 		<Sequelize.Options>{
 			dialect:  "postgres",
 			protocol: "postgres",
+			dialectOptions: {
+				ssl: true
+			},
 			omitNull: true,
 			freezeTableName: true,
 			pool: <Sequelize.PoolOptions>{
@@ -20,3 +23,4 @@ export const DatabaseConnection: Sequelize.Sequelize =
 export const createTransaction = async (): Promise<Sequelize.Transaction> => {
 	return DatabaseConnection.transaction();
 };
+
