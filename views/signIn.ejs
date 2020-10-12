@@ -32,7 +32,7 @@
 						<tr>
 							<td class="label">Employee ID: </td>
 							<td>
-								<input type="text" id="employeeId" name="employeeId" class="update"><br><br>
+								<input value="<% if (locals.employeeId) { %><%= locals.employeeId %><% } %>" type="text" id="employeeId" name="employeeId" class="update"><br><br>
 							</td>
 						</tr>
 						<tr>

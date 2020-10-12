@@ -9,7 +9,7 @@ import { Resources, ResourceKey } from "../resourceLookup";
 export const start = async (req: Request, res: Response): Promise<void> => {
 	return ActiveEmployeeExistsQuery.employeeExists()
 	.then ((exisits: boolean): Promise<void> => {
-		return Promise.resolve(res.render(ViewNameLookup.SignIn));
+		return Promise.resolve(res.render(ViewNameLookup.SignIn, <Object>{employeeId: req.query["employeeId"]}));
 	}).catch((error: any): void => {
 		res.redirect(ViewNameLookup.EmployeeDetail);
 	});
@@ -27,7 +27,7 @@ export const signIn = async (req: Request, res: Response, error: any
 		return res.render(
 			ViewNameLookup.SignIn,
 			<Object>{
-				errorMessage: error.message
+				errorMessage: error.message,
 			}
 		);
 	});

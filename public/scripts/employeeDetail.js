@@ -9,27 +9,27 @@ document.addEventListener("DOMContentLoaded", () => {
 function saveActionClick(event) {
 	// TODO: Actually save the employee via an AJAX call
 	if(document.getElementById('firstName').value == ""){
-		alert('Error: First name must be filled');
-		document.getElementById('firstName').focus();
-		return false;
-	}
+        displayError('Error: First name must be filled');
+        document.getElementById('firstName').focus();
+        return false;
+    }
 
-	if(document.getElementById('lastName').value == ""){
-		alert('Error: Last name must be filled');
-		document.getElementById('lastName').focus();
-		return false;
-	}
+    if(document.getElementById('lastName').value == ""){
+        displayError('Error: Last name must be filled');
+        document.getElementById('lastName').focus();
+        return false;
+    }
 
-	if(document.getElementById('password').value == ""){
-		alert('Error: Password must be filled');
-		document.getElementById('password').focus();
-		return false;
-	}
+    if(document.getElementById('password').value == ""){
+        displayError('Error: Password must be filled');
+        document.getElementById('password').focus();
+        return false;
+    }
 
-	if(document.getElementById('password').value != document.getElementById('confirmPassword').value){
-		alert('Error: Password and Confirm Password do not match');
-		return false;
-	}
+    if(document.getElementById('password').value != document.getElementById('confirmPassword').value){
+        displayError('Error: Password and Confirm Password do not match');
+        return false;
+    }
 
 	const saveActionElement = event.target;
 	saveActionElement.disabled = true;
@@ -48,10 +48,10 @@ function saveActionClick(event) {
 	};
 
 	if(employeeIdIsDefined) {
-		ajaxPut(saveActionUrl, saveEmployeeRequest, (callbackResponse) => {
+		ajaxPatch(saveActionUrl, saveEmployeeRequest, (callbackResponse) => {
 			saveActionElement.disabled = false;
 
-			if(isSuccessReponse(callbackResponse)){
+			if(isSuccessResponse(callbackResponse)){
 				displayEmployeeSavedAlertModal();
 			}
 		});
@@ -59,16 +59,19 @@ function saveActionClick(event) {
 		ajaxPost(saveActionUrl, saveEmployeeRequest, (callbackResponse) => {
 			saveActionElement.disabled = false;
 
-			if(isSuccessReponse(callbackResponse)){
+			if(isSuccessResponse(callbackResponse)){
 				displayEmployeeSavedAlertModal();
-
-				if((callbackResponse.data != null)
-					&&(callbackResponse.data.employee != null)
-					&&(callbackResponse.data.employee.id.trim() !== "")){
-
-						document.getElementById("employeeEmployeeId").classList.remove("hidden");
-						setEmployeeId(callbackResponse.data.employee.id.trim());
-						setEmployeeEmployeeId(callbackResponse.data.employee.employeeId.trim());
+				if(callbackResponse.data != null) {
+					if(callbackResponse.data.id != null) {
+						setEmployeeId(callbackResponse.data.id);
+						setEmployeeEmployeeId(callbackResponse.data.employeeId);
+						console.log(callbackResponse.data.redirectUrl);
+						
+					}
+					if(callbackResponse.data.redirectUrl != null)
+					{
+						window.location.replace(callbackResponse.data.redirectUrl);
+					}	
 				}
 			}
 		});
@@ -95,6 +98,10 @@ function hideEmployeeSavedAlertModal() {
 	}
 
 	getSavedAlertModalElement().style.display = "none";
+}
+
+function getSavedAlertModalElement() {
+	return document.getElementById("employeeSavedAlertModal");
 }
 
 function getEmployeeId() {
@@ -136,6 +143,7 @@ function getEmployeeEmployeeId() {
 
 function setEmployeeEmployeeId(id) {
 	getEmployeeEmployeeIdElement().value = id;
+	document.getElementById("idContainer").classList.remove("hidden");
 }
 
 function getEmployeeEmployeeIdElement() {

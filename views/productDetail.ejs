@@ -41,14 +41,14 @@
 						<td class="label">Lookup Code:</td>
 						<td>
 							<input id="productLookupCode" type="text" value="<% if (locals.product && locals.product.lookupCode) { %><%= locals.product.lookupCode %><% } %>" class="update" 
-							<% if (!locals.IsElevatedUser) { %> readonly="readonly"<% } %> />
+							<% if (!locals.isElevatedUser) { %> readonly="readonly"<% } %> />
 						</td>
 					</tr>
 					<tr>
 						<td class="label">Count:</td>
 						<td>
 							<input id="productCount" type="number" value="<% if (locals.product && locals.product.count) { %><%= locals.product.count.toString() %><% } %>" class="update" 
-							<% if (!locals.IsElevatedUser) { %> readonly="readonly"<% } %> />
+							<% if (!locals.isElevatedUser) { %> readonly="readonly"<% } %> />
 						</td>
 					</tr>
 				</tbody>
@@ -57,14 +57,18 @@
 
 		<div>
 			<br />
-			<div id="deleteActionContainer" <% if (!locals.product || !locals.product.id || (locals.product.id.trim() === "") || !locals.IsElevatedUser) { %>class="hidden"<% } %>>
+			<div id="deleteActionContainer" <% if (!locals.product || !locals.product.id || (locals.product.id.trim() === "") || !locals.isElevatedUser) { %>class="hidden"<% } %>>
 				<button id="deleteButton" type="button" class="action">Delete</button>
 				<br />
 				<br />
 			</div>
-			<div id="saveActionContainer" <% if (!locals.IsElevatedUser) { %> class="hidden"<% } %>>
+			<div id="saveActionContainer" <% if (!locals.isElevatedUser) { %> class="hidden"<% } %>>
 				<button id="saveButton" type="button" class="action">Save</button>
 			</div>
+		</div>
+		
+		<div class="footer">
+			<img id="signOutImage" src="/images/Sign-Out.png" alt="Sign Out" class="footer" />
 		</div>
 
 		<div id="productSavedAlertModal" class="modal animate-opacity-show">

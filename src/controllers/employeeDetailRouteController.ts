@@ -24,7 +24,10 @@ const determineCanCreateEmployee = async (req: Request): Promise<CanCreateEmploy
 			const check = EmployeeHelper.isElevatedUser((<ActiveUser>activeUserCommandResponse.data).classification);
 			return Promise.resolve(<CanCreateEmployee>{ employeeExists: true, isElevatedUser: check });
 		}).catch((error: any): Promise<CanCreateEmployee> => {
-			return Promise.resolve(<CanCreateEmployee>{ employeeExists: false, isElevatedUser: true });
+			if (error.message == Resources.getString(ResourceKey.USER_NOT_FOUND)) {
+				return Promise.resolve(<CanCreateEmployee>{ employeeExists: true, isElevatedUser: false });
+			}
+			return Promise.resolve(<CanCreateEmployee>{ employeeExists: false, isElevatedUser: false });
 		});
 };
 
@@ -132,6 +135,11 @@ const saveEmployee = async (
 
 			return performSave(req.body, !employeeExists);
 		}).then((saveEmployeeCommandResponse: CommandResponse<Employee>): void => {
+			if (!employeeExists) {
+				res.send(<ApiResponse>{
+					redirectUrl: RouteLookup.SignIn + "?employeeId=" + saveEmployeeCommandResponse.data?.employeeId
+				});
+			}
 			res.status(saveEmployeeCommandResponse.status)
 				.send(saveEmployeeCommandResponse.data);
 		}).catch((error: any): void => {

@@ -40,7 +40,7 @@
 							<input id="employeeManagerId" type="hidden" value="<% if (locals.employee && locals.employee.managerId) { %><%= locals.employee.managerId %><% } %>" />
 						</td>
 					</tr>
-					<tr <% if (!locals.employee || !locals.employee.id || (locals.employee.id.trim() === "")) { %>class="hidden"<% } %>>
+					<tr id="idContainer" <% if (!locals.employee || !locals.employee.id || (locals.employee.id.trim() === "")) { %>class="hidden"<% } %>>
 						<td class="label">Employee ID:</td>
 						<td>
 							<input id="employeeEmployeeId" type="text" value="<% if (locals.employee && locals.employee.employeeId) { %><%= locals.employee.employeeId %><% } %>" class="update" disabled />
@@ -50,14 +50,14 @@
 					<tr>
 						<td class="label">First name:</td>
 						<td>
-							<input class="update" id="firstName" type="text">
+							<input value="<% if (locals.employee && locals.employee.firstName) { %><%= locals.employee.firstName %><% } %>" class="update" id="firstName" type="text">
 						</td>
 					</tr>
 
 					<tr>
 						<td class="label">Last name:</td>
 						<td>
-							<input class="update" id="lastName" type="text">
+							<input value="<% if (locals.employee && locals.employee.lastName) { %><%= locals.employee.lastName %><% } %>" class="update" id="lastName" type="text">
 						</td>
 					</tr>
 
@@ -76,11 +76,11 @@
 					</tr>
 					<tr>
 						<td class="label">Employee type:</td>
-						<td>
-							<select class="update" name="employeeType" id="employeeType">
-								<option value="101">Cashier</option>
-								<option value="501">Shift Manager</option>
+						<td  class="update">
+							<select value="<% if (locals.employee && locals.employee.classification) { %><%= locals.employee.classification %><% } %>" name="employeeType" id="employeeType">
 								<option value="701">General Manager</option>
+								<option value="501">Shift Manager</option>
+								<option value="101">Cashier</option>
 							</select>
 						</td>
 					</tr>

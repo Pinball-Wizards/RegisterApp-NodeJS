@@ -90,9 +90,9 @@ export const execute = async (
 			return queriedEmployee.update(
 
 				<Object>{
-					firstname: saveEmployeeRequest.firstName,
-					lastname: saveEmployeeRequest.lastName,
-					password: saveEmployeeRequest.password,
+					firstName: saveEmployeeRequest.firstName,
+					lastName: saveEmployeeRequest.lastName,
+					password: EmployeeHelper.hashString(saveEmployeeRequest.password),
 					classification: saveEmployeeRequest.classification
 				},
 				<Sequelize.InstanceUpdateOptions>{
