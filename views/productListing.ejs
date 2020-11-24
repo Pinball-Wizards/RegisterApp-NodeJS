@@ -6,6 +6,7 @@
 
 	<link rel="stylesheet" type="text/css" href="/styles/master.css">
 	<link rel="stylesheet" type="text/css" href="/styles/productListing.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
 	<script type="text/javascript" src="/scripts/master.js" defer></script>
 	<script type="text/javascript" src="/scripts/productListing.js" defer></script>
@@ -16,7 +17,26 @@
 		<h1 class="primary-message">Products Listing</h1>
 	</div>
 
+
 	<div id="main" class="main">
+		<form name="searchForm" action="/productListing" method="POST" onsubmit="searchForm();" class="inputContent">
+			<div style="display: inline-block;">
+				<table>
+					<tbody>
+						<tr>
+							<td class="label">
+								<button type="submit" class="btn searchForm">
+									<span class="glyphicon glyphicon-search"></span> Search
+								  </button>
+							</td>
+							<td>
+								<input type="text" id="searchBar" name="searchBar" class="update"><br><br>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</form>
 		<div id="error" <% if (!locals.errorMessage || (locals.errorMessage === "")) { %> class="hidden" <% } %>>
 			<h4 id="errorMessage" class="error-message">
 				<% if (locals.errorMessage && (locals.errorMessage !== "")) { %>

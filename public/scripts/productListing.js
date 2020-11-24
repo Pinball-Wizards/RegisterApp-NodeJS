@@ -32,3 +32,8 @@ function productClick(event) {
 		"/productDetail/"
 		+ listItem.querySelector("input[name='productId'][type='hidden']").value);
 }
+
+function searchForm(){
+	var x = document.forms["searchForm"]["searchBar"].value;
+	// Need to implement search functionality.
+}

@@ -1,3 +1,32 @@
+input.update {
+	border: solid;
+	line-height: 1.75em;
+	width: calc(100% - 56px);
+	background-color: #FFFFFF;
+	font-size: 16px;
+	padding: 0em .25em 0em .25em;
+}
+
+table td.label {
+	font-weight: bold;
+}
+
+div.inputContent,
+form.inputContent {
+	display: inline-block;
+}
+
+.searchForm{
+	background-color: #c7d4ff;
+	color: #f7feff;
+}
+
+.searchForm:hover{
+	background-color: #575191;
+	color: #fcecff !important;
+}
+
+
 .productsWrapper {
 	display: inline-block;
 }
